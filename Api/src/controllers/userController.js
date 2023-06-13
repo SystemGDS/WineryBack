@@ -1,0 +1,109 @@
+const { Users, Cart, Order } = require("../db")
+const axios = require("axios")
+const { Op } = require("sequelize")
+
+const fakeUser = async () => {
+    const allUsers = await Users.findAll()
+    if(allUsers.length) return allUsers;
+    else {
+        const usersApi = (await axios.get("https://jsonplaceholder.typicode.com/users")).data.map(user =>{
+            return {
+                name: user.name,
+                userName: user.username,
+                email: user.email,
+                direction: user.address.city,
+
+            }
+            
+        })
+        const usersDB = await Users.bulkCreate(usersApi, {returning: true})
+
+        return usersDB
+    }
+}
+
+const getAllUsers = async () => {
+    const allUsers = await Users.findAll({
+        include:[
+            {
+                model: Cart
+            },
+            {
+                model: Order
+            }
+        ]
+    })
+
+    return allUsers
+}
+
+const getUserByUserName = async (username) => {
+    const userByUserName = await Users.findAll({
+        where:{
+            userName:{ 
+                [Op.iLike]: `%${username}%`
+            }
+        }
+    })
+
+    return userByUserName
+}
+
+const getUserById = async (id) => {
+    const userById = await Users.findByPk(Number(id),{
+        include:[
+            {
+                model: Cart
+            },
+            {
+                model: Order
+            }
+        ]
+    })
+
+    return userById
+}
+
+const createUser = async (name, userName, email) => {
+    const [newUser, created] = await Users.findOrCreate({
+        where:{
+            email:email
+        },
+        defaults:{
+            name,
+            email,
+            userName
+        }
+    })
+
+    if (created) {
+        const cart = await Cart.create();
+        await newUser.setCart(cart);
+      }
+    
+
+    return [newUser, created];
+}
+
+const updateCart = async(userId, wines) => {
+    const cart = await Cart.findOne({where:{userId}})
+    cart.products = [...wines]  //cart = {wines:[{id, image, name, stock, price, quantity}], userId:{id}}
+    const totalPrice = wines.reduce((acumulator, wine) => {
+        const totalByProduct = wine.quantity * wine.price;
+        return acumulator + totalByProduct
+    }, 0)
+    cart.total = totalPrice
+    await cart.save()
+
+    return cart
+}
+
+
+module.exports = {
+    getAllUsers,
+    getUserByUserName,
+    fakeUser,
+    getUserById,
+    createUser,
+    updateCart
+}
