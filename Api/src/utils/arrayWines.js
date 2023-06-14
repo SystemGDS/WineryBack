@@ -346,7 +346,7 @@ const nuevoArrayVinos = [
   {
   name: "Ritchie Chardonnay 2005",
   winery: "Aubert",
-  origin: "United States",
+  origin: "United states",
   price: 10,
   image: "https://bestofwines.com/wine-images/32413_big.webp",
   category: "White wine",
@@ -354,7 +354,7 @@ const nuevoArrayVinos = [
   {
   name: "Ritchie Chardonnay 2004 (Magnum)",
   winery: "Aubert",
-  origin: "United States",
+  origin: "United states",
   price: 10,
   image: "https://bestofwines.com/wine-images/32412_big.webp",
   category: "White wine",
@@ -399,7 +399,7 @@ const nuevoArrayVinos = [
   }, {
     name:"Chakana ayni rose nature pinot",
     winery:"Chakana",
-    origin:"United state",
+    origin:"United states",
     price:10,
     image:"https://www.debarricas.com.ar/wp-content/uploads/02601056-1.webp",
     category: "Sparkling wine"
