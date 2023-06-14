@@ -104,6 +104,56 @@ const createReview = async (userId, wineId, comment, stars) => {
   return newReview
 }
 
+const updateUser = async(userName, direction, image, email)=> {
+    const props = {};
+    if(userName) props.userName= userName
+    if(direction) props.direction = direction
+    if(image) props.image = image
+
+    const user = await Users.update(props,{
+        where:{
+            email
+        }
+    })
+
+    return user
+}
+const banUser = async(email)=> {
+    const user = await Users.findOne({where: {email}})
+    if(!user) throw new Error(`No se encontro usuario con el email ${email}`)
+    await user.update({banned: !user.banned})
+
+    return user
+}
+
+const createAdmin = async(email) => {
+    const user = await Users.findOne({where:{email}})
+    
+    if(!user) throw new Error(`No se encontro usuario con el email ${email}`)
+    await user.update({isAdmin:!user.isAdmin})
+
+    return user
+}
+
+const updateFavorites = async(email, wines) =>{
+    const user = await Users.findOne({where: {email}})
+    if(!user) throw new Error(`No se encontro usuario con el email ${email}`)
+    user.favorites = [...wines] //{id, name,image, price}
+    await user.save()
+    
+    return user
+}
+
+const getAllOrders = async() =>{
+    const todosusers = await getAllUsers()
+    
+
+    console.log("qloq")
+
+    return todosusers
+}
+
+
 
 module.exports = {
     getAllUsers,
@@ -112,5 +162,10 @@ module.exports = {
     getUserById,
     createUser,
     updateCart,
-    createReview
+    createReview,
+    updateUser,
+    banUser,
+    createAdmin,
+    updateFavorites,
+    getAllOrders
 }
