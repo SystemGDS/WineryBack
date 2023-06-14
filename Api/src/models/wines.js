@@ -40,10 +40,10 @@ module.exports = (sequelize) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    idReviews:{
-      type: DataTypes.ARRAY(DataTypes.INTEGER),
-      defaultValue: []
-    },
+    // idReviews:{
+    //   type: DataTypes.ARRAY(DataTypes.INTEGER),
+    //   defaultValue: []
+    // },
     banned:{
       type: DataTypes.BOOLEAN,
       defaultValue: false

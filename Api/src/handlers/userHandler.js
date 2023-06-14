@@ -1,4 +1,4 @@
-const { getAllUsers, getUserByUserName, fakeUser, getUserById, createUser, updateCart} = require("../controllers/userController")
+const { getAllUsers, getUserByUserName, fakeUser, getUserById, createUser, updateCart, createReview} = require("../controllers/userController")
 
 const getUsers = async (req, res) => {
     const { username } = req.query;
@@ -70,11 +70,32 @@ const putCart = async (req, res) => {
     }
 }
 
+const postReview = async (req, res) => {
+    const propNecesarias = ["userId", "wineId", "comment", "stars"];
+    const propFaltantes = []
 
+    propNecesarias.forEach(prop => {
+        if(!req.body[prop]) propFaltantes.push(prop)
+    })
+    if(propFaltantes.length) {
+        const faltantes = `Campos obligatorios: ${propFaltantes.join(", ")}`
+        res.status(400).json({message: faltantes})
+    }
+    else {
+        const { userId, wineId, comment, stars} = req.body;
+        try {
+            const newComment = await createReview(userId, wineId, comment, stars)
+            res.status(200).json(newComment)
+        } catch (error) {
+            res.status(400).json({error: error.message})
+        }
+    }
+}
 
 module.exports = {
     getUsers,
     userByIdHandler,
     postUserHandler,
-    putCart
+    putCart,
+    postReview
 }
