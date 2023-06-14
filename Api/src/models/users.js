@@ -28,10 +28,6 @@ module.exports = (sequelize) => {
     direction:{
       type: DataTypes.STRING,
     },
-    favorites:{
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      defaultValue: []
-    },
     isAdmin:{
       type: DataTypes.BOOLEAN,
       defaultValue: false
@@ -40,12 +36,16 @@ module.exports = (sequelize) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false
     },
-    imagen:{
+    image:{
       type: DataTypes.STRING,
       defaultValue: "https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg",
       validate:{
         isUrl: true,              
       }
+    },
+    favorites:{
+      type: DataTypes.ARRAY(DataTypes.JSON),
+      defaultValue: []
     }
 
   }, {timestamps: false}

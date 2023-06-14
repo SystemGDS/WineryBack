@@ -18,7 +18,7 @@ const postPayment = async(items, payer) =>  {
             failure: "http://127.0.0.1:5173/",
             pending: "http://127.0.0.1:5173/",
         },
-        notification_url: "https://75c9-2800-810-5e3-852c-b1d9-645f-c65b-abf.sa.ngrok.io/webhook",
+        notification_url: "https://a470-2800-810-5e3-852c-33-3d94-80f-77f0.sa.ngrok.io/webhook",
         metadata: payer,
     })
 
