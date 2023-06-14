@@ -8,8 +8,14 @@ module.exports = (sequelize) => {
       allowNull: false,
       autoIncrement: true,
     },
+    userId:{
+      type: DataTypes.INTEGER,
+    },
+    wineId:{
+      type: DataTypes.INTEGER,
+    },
     comment: {
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     stars: {
@@ -19,7 +25,13 @@ module.exports = (sequelize) => {
         min: 1,
       },
     },
-  });
+    date: {
+      type: DataTypes.DATEONLY,
+      defaultValue: new Date()
+    },
+  },
+  {timestamps: false}
+  );
 };
 
 // id primario o primaryKey                        - B

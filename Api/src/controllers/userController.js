@@ -1,4 +1,4 @@
-const { Users, Cart, Order } = require("../db")
+const { Users, Cart, Order, Review } = require("../db")
 const axios = require("axios")
 const { Op } = require("sequelize")
 
@@ -98,6 +98,12 @@ const updateCart = async(userId, wines) => {
     return cart
 }
 
+const createReview = async (userId, wineId, comment, stars) => {
+  const newReview = await Review.create({userId, wineId, comment, stars})
+
+  return newReview
+}
+
 
 module.exports = {
     getAllUsers,
@@ -105,5 +111,6 @@ module.exports = {
     fakeUser,
     getUserById,
     createUser,
-    updateCart
+    updateCart,
+    createReview
 }

@@ -1,7 +1,7 @@
-const { Wines } = require("../db");
+const { Wines, Review } = require("../db");
 const axios = require("axios")
 const { Op } = require("sequelize");
-const { vinosProvisionales } = require("../utils/arrayWines")
+const { nuevosVinosProvisionales } = require("../utils/arrayWines")
 
 const fetchAndSaveWinesFromAPI = async () => {
   // const excludedIds = [76, 111, 514, 269, 343, 370, 402, 413, 427, 469, 482, 483, 541, 537, 598, 663, 686, 702, 1, 12, 16, 21, 25, 26, 31, 33, 40, 43, 46, 54, 55, 58, 63, 69, 70, 101, 145, 146, 177, 184, 191, 193, 200, 203, 209, 219, 230, 251, 257, 265, 280, 514, 719];
@@ -34,7 +34,7 @@ const fetchAndSaveWinesFromAPI = async () => {
 
   // return winesDB;
 
-  const winesDB = await Wines.bulkCreate(vinosProvisionales, { returning: true });
+  const winesDB = await Wines.bulkCreate(nuevosVinosProvisionales, { returning: true });
 
   return winesDB;
 };
@@ -88,7 +88,14 @@ const getAllOrigins = async () => {
 }
 
 const getWineById = async (id) => {
-    const wine = await Wines.findByPk(id)
+    const wine = await Wines.findByPk(id,
+      {
+        include: [
+          {
+            model: Review
+          }
+        ]
+      })
     return wine
 }
 
