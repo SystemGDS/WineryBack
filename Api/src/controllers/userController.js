@@ -1,4 +1,4 @@
-const { Users, Cart, Order, Review } = require("../db")
+const { Users, Cart, Order, Review, Wines } = require("../db")
 const axios = require("axios")
 const { Op } = require("sequelize")
 
@@ -99,6 +99,16 @@ const updateCart = async(userId, wines) => {
 }
 
 const createReview = async (userId, wineId, comment, stars) => {
+    const existingReview = await Review.findOne({
+        where:{
+            userId,
+            wineId
+        }
+    });
+
+  if (existingReview) {
+    throw new Error('Ya tiene una review en este producto');
+  }
   const newReview = await Review.create({userId, wineId, comment, stars})
 
   return newReview
@@ -145,16 +155,45 @@ const updateFavorites = async(email, wines) =>{
 }
 
 const getAllOrders = async() =>{
-    const todosusers = await getAllUsers()
+    const allOrders = await Order.findAll()
+      const salesByProduct = {};
     
-
-    console.log("qloq")
-
-    return todosusers
+   allOrders.forEach((order) => {
+        order.items.forEach(async(item) => {
+          const productId = Number(item.id);
+          const quantity = Number(item.quantity);
+          
+          if(productId in salesByProduct){
+            salesByProduct[productId].quantity += quantity
+          }
+          else{
+            salesByProduct[productId] = {
+                id: productId,
+                name: item.title,
+                image: item.picture_url,
+                category: item.description,
+                quantity: quantity
+              }
+          }
+          
+          
+        });
+    });
+    
+    return salesByProduct;//{id, name, image, category, quantity}
 }
 
+const deleteReview = async(id) => {
+    const   reviewDeleted = await Review.destroy({
+        where:{
+            id
+        },
+        force:true
+    })
 
-
+return reviewDeleted
+}
+ 
 module.exports = {
     getAllUsers,
     getUserByUserName,
@@ -167,5 +206,6 @@ module.exports = {
     banUser,
     createAdmin,
     updateFavorites,
-    getAllOrders
+    getAllOrders,
+    deleteReview
 }
