@@ -1,5 +1,5 @@
 const { getAllUsers, getUserByUserName, fakeUser, getUserById, createUser,
-     updateCart, createReview, updateUser, banUser, createAdmin, updateFavorites, getAllOrders} = require("../controllers/userController")
+     updateCart, createReview, updateUser, banUser, createAdmin, updateFavorites, getAllOrders, deleteReview} = require("../controllers/userController")
 //trae todos los usuarios de la base de datos o por username
 const getUsers = async (req, res) => {
     const { username } = req.query;
@@ -134,7 +134,7 @@ const adminHandler = async(req, res) => {
         return res.status(500).json({error:error.message})
     }
 }
-
+//copia la lista de favoritos del front y crea un registro en la bd
 const putFavorites = async(req, res) => {
     const { email, wines } = req.body;
     try {
@@ -146,11 +146,31 @@ const putFavorites = async(req, res) => {
         return res.status(500).json({error:error.message})
     }
 }
+//trae todas las ordenes de compra de la bd
+const getOrders = async(req, res) => {
+try {
+    const allOrders = await getAllOrders()
+    allOrders
+    ? res.status(200).json(allOrders)
+    : res.status(400).json({message:"No hay ordenes de compra"})
+   
 
-// const getOrders = async(req, res) => {
-//    console.log("qloq")
-//    res.status(200).send(":D")
-// }
+} catch (error) {
+    return res.status(500).json({error:error.message})
+}}
+
+//borra una review por id
+const deleteReviewHandler = async (req, res) => {
+    const { reviewId } = req.body;
+    try {
+        const reviewDeleted = await deleteReview(reviewId)
+        reviewDeleted > 0
+        ? res.status(200).json({message: "Review borrado"})
+        : res.status(500).json({message:`No se pudo eliminar registro con id ${reviewId}`})
+    } catch (error) {
+        return res.status(500).json({error:error.message})
+    }
+}
 
 module.exports = {
     getUsers,
@@ -162,5 +182,6 @@ module.exports = {
     banHandler,
     adminHandler,
     putFavorites,
-    // getOrders
+    getOrders,
+    deleteReviewHandler
 }

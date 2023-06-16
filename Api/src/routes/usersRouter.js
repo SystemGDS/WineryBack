@@ -1,9 +1,10 @@
 const { Router } = require("express");
 const {
-  getUsers, userByIdHandler, adminHandler, postUserHandler, putCart, postReview, putUser, banHandler, putFavorites } = require("../handlers/userHandler");
+  getUsers, userByIdHandler, adminHandler, postUserHandler, putCart, postReview, putUser, banHandler, putFavorites, getOrders, deleteReviewHandler } = require("../handlers/userHandler");
 
 const userRouter = Router();
 
+userRouter.get("/orders", getOrders)
 userRouter.get("/", getUsers);
 userRouter.get("/:id", userByIdHandler);
 userRouter.post("/", postUserHandler);
@@ -13,7 +14,7 @@ userRouter.put("/", putUser)
 userRouter.put("/ban", banHandler)
 userRouter.put("/isadmin", adminHandler)
 userRouter.put("/favorites", putFavorites)
-// userRouter.get("/orders", getOrders)
+userRouter.delete("/review", deleteReviewHandler)
 
 
 module.exports = userRouter;
