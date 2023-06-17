@@ -154,7 +154,7 @@ const createWine = async (image, name, winery, detail, price, category, stock, o
 }
 
 const deleteLogicWine = async (id) => {
-    const wine = await Wines.findByPk(id);
+    const wine = await Wines.findByPk(Number(id));
     const wineBanned = await wine.update({
         banned: !wine.banned
     });
