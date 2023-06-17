@@ -14,11 +14,11 @@ const postPayment = async(items, payer) =>  {
         payer,  // payer: {name, surname, email}
         binary_mode: true,
         back_urls:{
-            success: "http://127.0.0.1:5173/about",
+            success: "https://henrywinery.netlify.app/about",
             failure: "http://127.0.0.1:5173/",
             pending: "http://127.0.0.1:5173/",
         },
-        notification_url: "https://0cb9-2800-810-5e3-852c-33-3d94-80f-77f0.sa.ngrok.io/webhook",
+        notification_url: "https://wineryback-production.up.railway.app/webhook",
         metadata: payer,
     })
 
