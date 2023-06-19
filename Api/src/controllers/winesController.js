@@ -165,10 +165,10 @@ const deleteWine = async (id) => {
     const wine = await Wines.findByPk(Number(id))
     if(wine){
         await Wines.destroy({where:{id: Number(id)}});
-        return {success:`Vino con id ${id} eliminado exitosamente.`}
+        return {success:`Wine with id ${id} removed successfully.`}
     }
     else{
-        return {error: `No existe un vino con id ${id}.`}
+        return {error: `There is no wine with id ${id}.`}
     }
 }
 

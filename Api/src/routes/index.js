@@ -4,6 +4,7 @@ const winesRouter = require("./winesRouter");
 const router = Router();
 const userRouter = require("./usersRouter");
 const paymentRouter = require("./paymentRoutes");
+const authRouter = require("./authRouter")
 
 router.use(express.json());
 

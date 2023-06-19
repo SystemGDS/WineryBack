@@ -2,25 +2,65 @@ const { Users, Cart, Order, Review, Wines } = require("../db")
 const axios = require("axios")
 const { Op } = require("sequelize")
 
-const fakeUser = async () => {
-    const allUsers = await Users.findAll()
-    if(allUsers.length) return allUsers;
-    else {
-        const usersApi = (await axios.get("https://jsonplaceholder.typicode.com/users")).data.map(user =>{
-            return {
-                name: user.name,
-                userName: user.username,
-                email: user.email,
-                direction: user.address.city,
+// const fakeUser = async () => {
+//     const allUsers = await Users.findAll()
+//     if(allUsers.length) return allUsers;
+//     else {
+//         const usersApi = (await axios.get("https://jsonplaceholder.typicode.com/users")).data.map(user =>{
+//             return {
+//                 name: user.name,
+//                 userName: user.username,
+//                 email: user.email,
+//                 direction: user.address.city,
 
-            }
+//             }
             
-        })
-        const usersDB = await Users.bulkCreate(usersApi, {returning: true})
+//         })
+//         const usersDB = await Users.bulkCreate(usersApi, {returning: true})
 
-        return usersDB
+//         return usersDB
+//     }
+// }
+
+const fakeUser = async () => {
+    const allUsers = await Users.findAll();
+    if (allUsers.length) return allUsers;
+    else {
+      const usersApi = (await axios.get("https://jsonplaceholder.typicode.com/users")).data.map(user => {
+        return {
+          name: user.name,
+          userName: user.username,
+          email: user.email,
+          direction: user.address.city,
+        };
+      });
+  
+      const usersDB = await Promise.all(
+        usersApi.map(async (user) => {
+          const [newUser, created] = await Users.findOrCreate({
+            where: {
+              email: user.email,
+            },
+            defaults: {
+              name: user.name,
+              email: user.email,
+              userName: user.userName,
+            },
+          });
+  
+          if (created) {
+            const cart = await Cart.create();
+            await newUser.setCart(cart);
+          }
+  
+          return newUser;
+        })
+      );
+  
+      return usersDB;
     }
-}
+  };
+  
 
 const getAllUsers = async () => {
     const allUsers = await Users.findAll({
@@ -107,7 +147,7 @@ const createReview = async (userId, wineId, comment, stars) => {
     });
 
   if (existingReview) {
-    throw new Error('Ya tiene una review en este producto');
+    throw new Error('Already have a review on this product');
   }
   const newReview = await Review.create({userId, wineId, comment, stars})
 
@@ -130,7 +170,7 @@ const updateUser = async(userName, direction, image, email)=> {
 }
 const banUser = async(email)=> {
     const user = await Users.findOne({where: {email}})
-    if(!user) throw new Error(`No se encontro usuario con el email ${email}`)
+    if(!user) throw new Error(`No user found with email${email}`)
     await user.update({banned: !user.banned})
 
     return user
@@ -139,7 +179,7 @@ const banUser = async(email)=> {
 const createAdmin = async(email) => {
     const user = await Users.findOne({where:{email}})
     
-    if(!user) throw new Error(`No se encontro usuario con el email ${email}`)
+    if(!user) throw new Error(`No user found with email ${email}`)
     await user.update({isAdmin:!user.isAdmin})
 
     return user
@@ -147,7 +187,7 @@ const createAdmin = async(email) => {
 
 const updateFavorites = async(email, wines) =>{
     const user = await Users.findOne({where: {email}})
-    if(!user) throw new Error(`No se encontro usuario con el email ${email}`)
+    if(!user) throw new Error(`No user found with email ${email}`)
     user.favorites = [...wines] //{id, name,image, price}
     await user.save()
     

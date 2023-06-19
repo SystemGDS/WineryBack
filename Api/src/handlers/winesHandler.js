@@ -22,7 +22,7 @@ const getWines = async (req, res) =>{
       if (winesFiltered.length) {
         res.status(200).json(winesFiltered);
       } else {
-        res.status(400).json({ message: 'No se encontraron vinos que cumplan los criterios de búsqueda.' });
+        res.status(400).json({ message: 'No wines were found that meet the search criteria.' });
       }
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -36,7 +36,7 @@ const wineByIdHandler = async (req, res) => {
     try {
         const wine = await getWineById(id);
         if(wine) return res.status(200).json(wine);
-        else return res.status(400).json({message:`No se encontro el vino con el id ${id}`})
+        else return res.status(400).json({message:`The wine with the id was not found${id}`})
     } catch (error) {
       return  res.status(400).json({error: error.message})
     }
@@ -52,7 +52,7 @@ const createWineHandler = async (req, res) => {
         }
       });
       if (propFaltantes.length > 0) {
-        const faltantes = `Campos faltantes: ${propFaltantes.join(', ')}`;
+        const faltantes = `Required fields: ${propFaltantes.join(', ')}`;
         res.status(400).json({ message: faltantes });
       } else {
         const { image, name, winery, detail, price, category, stock, origin } = req.body;
@@ -68,8 +68,8 @@ const createWineHandler = async (req, res) => {
             origin
           );
           created
-            ? res.status(200).json({message:`El vino ${name} se ha creado exitosamente`})
-            : res.status(200).json({message:`El vino ${name} ya existe`});
+            ? res.status(200).json({message:`Wine ${name} has been created successfully`})
+            : res.status(200).json({message:`Wine ${name} already exists`});
         } catch (error) {
          return res.status(400).json({ error: error.message });
         }
@@ -82,8 +82,8 @@ const deleteLogicHandler = async (req, res) => {
   try {
     const wineBanned = await deleteLogicWine(id);
     wineBanned.banned 
-    ? res.status(201).json({message:"El vino se ha deshabilitado"})
-    : res.status(201).json({message:"El vino se ha habilitado con éxito!"});
+    ? res.status(201).json({message:"The wine has been disabled"})
+    : res.status(201).json({message:"Wine has been successfully enabled!"});
   } catch (error) {
    return res.status(400).json({error: error.message})
   }  
@@ -94,7 +94,7 @@ const deleteHandler = async (req, res) => {
   const { id } = req.params;
   try {
     if(isNaN(id)){
-      return res.status(400).json({message:`El id ${id} no es válido`});
+      return res.status(400).json({message:`The id ${id} is not valid`});
     }
     else{
       const result = await deleteWine(id)
@@ -112,12 +112,12 @@ const deleteHandler = async (req, res) => {
 const updateWineHandler = async (req, res) => {
   const { id, name, winery, origin, detail, image, category, stock, price} = req.body;
   try {
-    if (isNaN(id)) return res.status(400).json({ message: "El Id proporcionado no es válido" });
+    if (isNaN(id)) return res.status(400).json({ message: "The provided id is not valid" });
     else{
     const wineUpdated = await updateWine(id, name, winery, origin, detail, image, category, stock, price);
     wineUpdated[0] > 0
-    ? res.status(200).json({ message: 'El vino se actualizo con éxito!'})
-    : res.status(400).json({ message: `No se encontro vino con id ${id}`})
+    ? res.status(200).json({ message: 'The wine was successfully updated!'})
+    : res.status(400).json({ message: `No wine found with id ${id}`})
     }
   } catch (error) {
    return res.status(400).json({error: error.message})
