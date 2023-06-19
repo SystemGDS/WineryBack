@@ -234,6 +234,15 @@ const deleteReview = async(id) => {
 return reviewDeleted
 }
  
+const getUserByEmailController = async(email) => {
+    const userByEmail = await Users.findOne({
+        where:{
+            email: email
+        }
+    })
+
+    return userByEmail
+}
 module.exports = {
     getAllUsers,
     getUserByUserName,
@@ -247,5 +256,6 @@ module.exports = {
     createAdmin,
     updateFavorites,
     getAllOrders,
-    deleteReview
+    deleteReview,
+    getUserByEmailController
 }

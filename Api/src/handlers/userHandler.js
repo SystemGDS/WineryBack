@@ -1,5 +1,5 @@
 const { getAllUsers, getUserByUserName, fakeUser, getUserById, createUser,
-     updateCart, createReview, updateUser, banUser, createAdmin, updateFavorites, getAllOrders, deleteReview} = require("../controllers/userController")
+     updateCart, createReview, updateUser, banUser, createAdmin, updateFavorites, getAllOrders, deleteReview, getUserByEmailController} = require("../controllers/userController")
 //trae todos los usuarios de la base de datos o por username
 const getUsers = async (req, res) => {
     const { username } = req.query;
@@ -35,6 +35,24 @@ const userByIdHandler = async (req, res) => {
         res.status(500).json({error: error.message})
     }
 }
+
+//trae user por email
+const getUserByEmail = async(req, res) => {
+    const { email } = req.body;
+    try {
+        if(!email) res.status(400).json({message:"Email is missing"})
+        else{
+            const userByEmail = await getUserByEmailController(email)
+            userByEmail
+            ? res.status(200).json(userByEmail)
+            : res.status(200).json({message:`User with email ${email} not found`})
+        }
+    } catch (error) {
+        res.status(500).json({error: error.message})
+    }
+}
+
+
 //crea un usuario y lo vincula a un carrito
 const postUserHandler = async (req, res) => {
     const propNecesarias = ["name", "userName", "email"];
@@ -183,5 +201,6 @@ module.exports = {
     adminHandler,
     putFavorites,
     getOrders,
-    deleteReviewHandler
+    deleteReviewHandler,
+    getUserByEmail
 }

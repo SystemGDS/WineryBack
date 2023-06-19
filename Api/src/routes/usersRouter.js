@@ -1,9 +1,10 @@
 const { Router } = require("express");
 const {
-  getUsers, userByIdHandler, adminHandler, postUserHandler, putCart, postReview, putUser, banHandler, putFavorites, getOrders, deleteReviewHandler } = require("../handlers/userHandler");
+  getUsers, userByIdHandler, adminHandler, postUserHandler, putCart, postReview, putUser, banHandler, getUserByEmail, putFavorites, getOrders, deleteReviewHandler } = require("../handlers/userHandler");
 
 const userRouter = Router();
 
+userRouter.get("/email", getUserByEmail)
 userRouter.get("/orders", getOrders)
 userRouter.get("/", getUsers);
 userRouter.get("/:id", userByIdHandler);
