@@ -9,15 +9,15 @@ module.exports = (sequelize) => {
       autoIncrement: true
         },
     name:{
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(100),
       allowNull: false,
     },
     winery:{
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(100),
       allowNull: false,
     },
     origin:{
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(50),
       allowNull: false,
     },
     detail:{
@@ -29,7 +29,7 @@ module.exports = (sequelize) => {
       allowNull: false
     },
     category:{
-      type:DataTypes.STRING,
+      type:DataTypes.STRING(50),
       allowNull: false,
     },
     stock:{
