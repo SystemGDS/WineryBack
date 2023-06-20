@@ -10,7 +10,7 @@ const {
   banUser,
   createAdmin,
   updateFavorites,
-  getAllOrders,
+  updateOrder, getAllOrders,
   deleteReview,
   getUserByEmailController,
 } = require("../controllers/userController");
@@ -208,30 +208,42 @@ const getOrders = async (req, res) => {
 
 //borra una review por id
 const deleteReviewHandler = async (req, res) => {
-  const { reviewId } = req.body;
-  try {
-    const reviewDeleted = await deleteReview(reviewId);
-    reviewDeleted > 0
-      ? res.status(200).json({ message: "Review deleted" })
-      : res
-          .status(500)
-          .json({ message: `Could not delete review with id ${reviewId}` });
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
-  }
-};
+    const { reviewId } = req.body;
+    try {
+        const reviewDeleted = await deleteReview(reviewId)
+        reviewDeleted > 0
+        ? res.status(200).json({message: "Review deleted"})
+        : res.status(500).json({message:`Could not delete review with id ${reviewId}`})
+    } catch (error) {
+        return res.status(500).json({error:error.message})
+    }
+}
+
+const putOrder = async(req, res) =>{
+    const {orderId, status} = req.body;
+    try {
+        if(!orderId) return res.status(422).json({message: "Order id is missing"})
+        const orderUpdated = await updateOrder(orderId, status)
+        orderUpdated
+        ? res.status(200).json({order: orderUpdated, message:"Status changed successfully"})
+        : res.status(500).json({message:"Could not change status"})
+    } catch (error) {
+        return res.status(500).json({error:error.message})
+    }
+}
 
 module.exports = {
-  getUsers,
-  userByIdHandler,
-  postUserHandler,
-  putCart,
-  postReview,
-  putUser,
-  banHandler,
-  adminHandler,
-  putFavorites,
-  getOrders,
-  deleteReviewHandler,
-  getUserByEmail,
-};
+    getUsers,
+    userByIdHandler,
+    postUserHandler,
+    putCart,
+    postReview,
+    putUser,
+    banHandler,
+    adminHandler,
+    putFavorites,
+    getOrders,
+    deleteReviewHandler,
+    getUserByEmail,
+    putOrder
+}

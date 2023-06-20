@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const {
-  getUsers, userByIdHandler, adminHandler, postUserHandler, putCart, postReview, putUser, banHandler, getUserByEmail, putFavorites, getOrders, deleteReviewHandler } = require("../handlers/userHandler");
+  getUsers, userByIdHandler, adminHandler, postUserHandler, putCart, postReview, putOrder, putUser, banHandler, getUserByEmail, putFavorites, getOrders, deleteReviewHandler } = require("../handlers/userHandler");
 
 const userRouter = Router();
 
@@ -16,6 +16,7 @@ userRouter.put("/ban", banHandler)
 userRouter.put("/isadmin", adminHandler)
 userRouter.put("/favorites", putFavorites)
 userRouter.delete("/review", deleteReviewHandler)
+userRouter.put("/statusorder", putOrder)
 
 
 module.exports = userRouter;
