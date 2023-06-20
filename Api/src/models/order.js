@@ -20,7 +20,7 @@ module.exports = (sequelize) => {
             defaultValue: false
           },
           statusDetail:{
-            type: DataTypes.ENUM("In process", "Paid", "Shipped", "Delivered"),
+            type: DataTypes.ENUM("In process", "Paid", "Shipped", "Delivered", "Cancelled"),
             defaultValue: "In process"
           },
           datePayment: {

@@ -198,29 +198,31 @@ const getAllOrders = async() =>{
     const allOrders = await Order.findAll()
       const salesByProduct = {};
     
-   allOrders.forEach((order) => {
-        order.items.forEach(async(item) => {
-          const productId = Number(item.id);
-          const quantity = Number(item.quantity);
+//    allOrders.forEach((order) => {           // trae las ventas por producto
+//         order.items.forEach(async(item) => {
+//           const productId = Number(item.id);
+//           const quantity = Number(item.quantity);
           
-          if(productId in salesByProduct){
-            salesByProduct[productId].quantity += quantity
-          }
-          else{
-            salesByProduct[productId] = {
-                id: productId,
-                name: item.title,
-                image: item.picture_url,
-                category: item.description,
-                quantity: quantity
-              }
-          }
+//           if(productId in salesByProduct){
+//             salesByProduct[productId].quantity += quantity
+//           }
+//           else{
+//             salesByProduct[productId] = {
+//                 id: productId,
+//                 name: item.title,
+//                 image: item.picture_url,
+//                 category: item.description,
+//                 quantity: quantity
+//               }
+//           }
           
           
-        });
-    });
+ //       });
+  //  });
+
+
     
-    return salesByProduct;//{id, name, image, category, quantity}
+    return allOrders;//{id, name, image, category, quantity}
 }
 
 const deleteReview = async(id) => {
@@ -243,6 +245,28 @@ const getUserByEmailController = async(email) => {
 
     return userByEmail
 }
+
+const updateOrder = async (id, status) => {
+    const allowedStatus = ['In process', 'Paid', 'Shipped', 'Delivered', 'Cancelled'];
+  
+    if (!allowedStatus.includes(status)) {
+      throw new Error('Invalid status');
+    }
+  
+    const order = await Order.findByPk(Number(id));
+  
+    if (!order) {
+      throw new Error('Order not found');
+    }
+  
+    order.statusDetail = status;
+  
+    await order.save();
+  
+    return order;
+  };
+  
+
 module.exports = {
     getAllUsers,
     getUserByUserName,
@@ -257,5 +281,6 @@ module.exports = {
     updateFavorites,
     getAllOrders,
     deleteReview,
-    getUserByEmailController
+    getUserByEmailController,
+    updateOrder
 }

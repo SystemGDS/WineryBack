@@ -1,5 +1,5 @@
 const { getAllUsers, getUserByUserName, fakeUser, getUserById, createUser,
-     updateCart, createReview, updateUser, banUser, createAdmin, updateFavorites, getAllOrders, deleteReview, getUserByEmailController} = require("../controllers/userController")
+     updateCart, createReview, updateUser, banUser, createAdmin, updateFavorites, updateOrder, getAllOrders, deleteReview, getUserByEmailController} = require("../controllers/userController")
 //trae todos los usuarios de la base de datos o por username
 const getUsers = async (req, res) => {
     const { username } = req.query;
@@ -190,6 +190,19 @@ const deleteReviewHandler = async (req, res) => {
     }
 }
 
+const putOrder = async(req, res) =>{
+    const {orderId, status} = req.body;
+    try {
+        if(!orderId) return res.status(422).json({message: "Order id is missing"})
+        const orderUpdated = await updateOrder(orderId, status)
+        orderUpdated
+        ? res.status(200).json({order: orderUpdated, message:"Status changed successfully"})
+        : res.status(500).json({message:"Could not change status"})
+    } catch (error) {
+        return res.status(500).json({error:error.message})
+    }
+}
+
 module.exports = {
     getUsers,
     userByIdHandler,
@@ -202,5 +215,6 @@ module.exports = {
     putFavorites,
     getOrders,
     deleteReviewHandler,
-    getUserByEmail
+    getUserByEmail,
+    putOrder
 }
