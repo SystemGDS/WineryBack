@@ -128,13 +128,19 @@ const postReview = async (req, res) => {
 };
 //modifica las propiedades username, direction o image de perfil de un usuario. el email no se modifica.
 const putUser = async (req, res) => {
-  const { userName, direction, image, email } = req.body;
+  const { userName, direction, image, email, birthday } = req.body;
   console.log(image);
 
   try {
     if (!email) return res.status(422).json({ message: "Falta el email" });
     else {
-      const userUpdated = await updateUser(userName, direction, image, email);
+      const userUpdated = await updateUser(
+        userName,
+        direction,
+        image,
+        email,
+        birthday
+      );
       userUpdated > 0
         ? res.status(200).json({ message: "Profile modified successfully" })
         : res
