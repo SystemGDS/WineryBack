@@ -39,14 +39,15 @@ const webhookPaymentHandler = async (req, res) => {
                 const [orderCreated, created] = await createOrder(order) 
                 
                 if(created){
-                    res.sendStatus(201)
                     // enviar email
                     const body = `
                             <h2>Felicitaciones por tu compra</h2>
-                            <p>Confirmamos tu comprar por el valor de ${result.body.transaction_amount} </p>
-                            <p>Confirmamos tu compra de ${result.body.additional_info.items.length} productos </p>
+                            <p>We confirm your purchase for the value of ${result.body.transaction_amount} </p>
+                            <p>We confirm your purchase of ${result.body.additional_info.items.length} wines </p>
                         `
-                    sendMailing('email.@gmail.com', 'confirmación de compra exitosa', body)
+                    sendMailing(`${result.body.metadata.email}`, 'Confirmation of successful purchase', body)
+                    res.sendStatus(201)
+
                 }
                 else{
                     res.sendStatus(500)

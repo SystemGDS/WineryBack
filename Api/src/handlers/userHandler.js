@@ -81,9 +81,9 @@ const postUserHandler = async (req, res) => {
     const faltantes = `Required fields: ${propFaltantes.join(", ")}`;
     res.status(400).json({ message: faltantes });
   } else {
-    const { name, userName, email, direction } = req.body;
+    const { name, userName, email, direction, image } = req.body;
     try {
-      const [newUser, created] = await createUser(name, userName, email);
+      const [newUser, created] = await createUser(name, userName, email, image);
       created
         ? res.status(200).json({
             message: `El usuario ${userName} se ha creado exitosamente`,
