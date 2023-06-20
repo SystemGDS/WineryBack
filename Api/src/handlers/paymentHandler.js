@@ -1,5 +1,6 @@
 const { merchant_orders } = require("mercadopago")
 const { postPayment, webhookPayment, createOrder } = require("../controllers/paymentController")
+const { sendMailing } = require("../utils/sendMailing")
 
 const postPaymentHandler = async (req, res) => {
     const { items, payer} = req.body
@@ -33,16 +34,24 @@ const webhookPaymentHandler = async (req, res) => {
                 order: result.body.order
             }
             console.log(order) 
-              if(paymentStatus === "approved"){
-              
-               const [orderCreated, created] = await createOrder(order) 
-
-               created
-               ? res.sendStatus(201)
-               : res.sendStatus(500)
-
+            if(paymentStatus === "approved"){
+            
+                const [orderCreated, created] = await createOrder(order) 
+                
+                if(created){
+                    res.sendStatus(201)
+                    // enviar email
+                    const body = `
+                            <h2>Felicitaciones por tu compra</h2>
+                            <p>Confirmamos tu comprar por el valor de ${result.body.transaction_amount} </p>
+                            <p>Confirmamos tu compra de ${result.body.additional_info.items.length} productos </p>
+                        `
+                    sendMailing('email.@gmail.com', 'confirmación de compra exitosa', body)
+                }
+                else{
+                    res.sendStatus(500)
+                }
             }
-
             
         }
         if(topic === "merchant_order"){
