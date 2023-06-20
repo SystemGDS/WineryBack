@@ -105,7 +105,7 @@ const getUserById = async (id) => {
   return userById;
 };
 
-const createUser = async (name, userName, email) => {
+const createUser = async (name, userName, email, image) => {
   const [newUser, created] = await Users.findOrCreate({
     where: {
       email: email,
@@ -114,6 +114,7 @@ const createUser = async (name, userName, email) => {
       name,
       email,
       userName,
+      image,
     },
   });
 
@@ -154,11 +155,12 @@ const createReview = async (userId, wineId, comment, stars) => {
   return newReview;
 };
 
-const updateUser = async (userName, direction, image, email) => {
+const updateUser = async (userName, direction, image, email, birthday) => {
   const props = {};
   if (userName) props.userName = userName;
   if (direction) props.direction = direction;
   if (image) props.image = image;
+  if(birthday) props.birthday = birthday
 
   const user = await Users.update(props, {
     where: {
