@@ -159,9 +159,15 @@ const updateCart = async (userId, wines) => {
 };
 
 const createReview = async (userId, wineId, comment, stars) => {
+  const userByEmail = await Users.findOne({
+    where:{
+      email: userId
+    }
+  })
+
   const existingReview = await Review.findOne({
     where: {
-      userId,
+      userId: userByEmail.id,
       wineId,
     },
   });
