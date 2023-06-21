@@ -105,6 +105,25 @@ const getUserById = async (id) => {
   return userById;
 };
 
+const getUserByEmailController = async (email) => {
+  const userByEmail = await Users.findOne({
+    where: {
+      email: email,
+    },
+    include: [
+     {
+      model: Order,
+     },
+     {
+      model: Cart
+     }
+    ]
+    
+  });
+
+  return userByEmail;
+};
+
 const createUser = async (name, userName, email, image) => {
   const [newUser, created] = await Users.findOrCreate({
     where: {
@@ -239,15 +258,7 @@ const deleteReview = async (id) => {
   return reviewDeleted;
 };
 
-const getUserByEmailController = async (email) => {
-  const userByEmail = await Users.findOne({
-    where: {
-      email: email,
-    },
-  });
 
-  return userByEmail;
-};
 
 const updateOrder = async (id, status) => {
     const allowedStatus = ['In process', 'Paid', 'Shipped', 'Delivered', 'Cancelled'];
