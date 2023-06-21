@@ -167,7 +167,7 @@ const createReview = async (userId, wineId, comment, stars) => {
 
   const existingReview = await Review.findOne({
     where: {
-      userId: userByEmail.id,
+      userId: Number(userByEmail.id),
       wineId,
     },
   });
@@ -175,7 +175,7 @@ const createReview = async (userId, wineId, comment, stars) => {
   if (existingReview) {
     throw new Error("Already have a review on this product");
   }
-  const newReview = await Review.create({ userId, wineId, comment, stars });
+  const newReview = await Review.create({ userId: userByEmail.id, wineId, comment, stars });
 
   return newReview;
 };
