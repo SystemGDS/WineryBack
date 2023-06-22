@@ -54,7 +54,7 @@ const userByIdHandler = async (req, res) => {
 
 //trae user por email
 const getUserByEmail = async (req, res) => {
-  const { email } = req.body;
+  const { email } = req.params;
   try {
     if (!email) res.status(400).json({ message: "Email is missing" });
     else {
@@ -62,7 +62,7 @@ const getUserByEmail = async (req, res) => {
       userByEmail
         ? res.status(200).json(userByEmail)
         : res
-            .status(200)
+            .status(400)
             .json({ message: `User with email ${email} not found` });
     }
   } catch (error) {
