@@ -286,6 +286,34 @@ const updateOrder = async (id, status) => {
     return order;
   };
   
+  const getReviewByEmailAndIdProduct = async (email, wineId) => {
+    try {
+      const user = await Users.findOne({
+        where: { email: email },
+      });
+  
+      if (!user) {
+        throw new Error('Usuario no encontrado');
+      }
+  
+      const review = await Review.findOne({
+        where: {
+          userId: user.id,
+          wineId: wineId,
+        },
+      });
+  
+      if (!review) {
+        throw new Error('Revisión no encontrada');
+      }
+  
+      return review;
+    } catch (error) {
+      throw error;
+    }
+  }
+  
+
 
 module.exports = {
     getAllUsers,
@@ -302,5 +330,6 @@ module.exports = {
     getAllOrders,
     deleteReview,
     getUserByEmailController,
-    updateOrder
+    updateOrder,
+    getReviewByEmailAndIdProduct
 }

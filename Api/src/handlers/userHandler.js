@@ -13,6 +13,7 @@ const {
   updateOrder, getAllOrders,
   deleteReview,
   getUserByEmailController,
+  getReviewByEmailAndIdProduct,
 } = require("../controllers/userController");
 //trae todos los usuarios de la base de datos o por username
 const getUsers = async (req, res) => {
@@ -232,6 +233,17 @@ const putOrder = async(req, res) =>{
     }
 }
 
+const getReviewByEmail = async (req, res) =>{
+    const {userId, wineId} = req.params
+    console.log(req.params)
+    try {
+        const review = await getReviewByEmailAndIdProduct(userId, wineId)
+        res.status(200).json(review)
+    } catch (error) {
+        res.status(500).json({error:error.message})
+    }
+}
+
 module.exports = {
     getUsers,
     userByIdHandler,
@@ -245,5 +257,6 @@ module.exports = {
     getOrders,
     deleteReviewHandler,
     getUserByEmail,
-    putOrder
+    putOrder,
+    getReviewByEmail
 }
