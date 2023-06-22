@@ -14,7 +14,7 @@ const postPayment = async(items, payer) =>  {
         payer,  // payer: {name, surname, email}
         binary_mode: true,
         back_urls:{
-            success: "https://henrywinery.netlify.app/home",
+            success: "https://henrywinery.netlify.app/",
             failure: "http://127.0.0.1:5173/",
             pending: "http://127.0.0.1:5173/",
         },
