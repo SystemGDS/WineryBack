@@ -4,7 +4,7 @@ const {
 
 const userRouter = Router();
 
-userRouter.get("/email", getUserByEmail)
+userRouter.get("/email/:email", getUserByEmail)
 userRouter.get("/orders", getOrders)
 userRouter.get("/", getUsers);
 userRouter.get("/:id", userByIdHandler);
